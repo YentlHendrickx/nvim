@@ -4,50 +4,59 @@
 -- See the kickstart.nvim README for more information
 return {
   {
+    'github/copilot.vim',
+  },
+  {
     'ThePrimeagen/harpoon',
     branch = 'harpoon2',
-    opts = {
-      menu = {
-        width = vim.api.nvim_win_get_width(0) - 4,
-      },
-      settings = {
-        save_on_toggle = true,
-      },
-    },
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    -- Custom mappings for harpoon, make it so that 'leader' h -> is harpoon:list():select(1)
     keys = function()
+      local harpoon = require 'harpoon'
       local keys = {
         {
           '<leader>a',
           function()
-            require('harpoon'):list():add()
+            harpoon:list():add()
           end,
-          desc = 'Harpoon File',
+          desc = 'Add current file to harpoon',
         },
         {
-          '<C-h>',
+          '<leader>h',
           function()
-            local harpoon = require 'harpoon'
+            harpoon:list():select(1)
+          end,
+          desc = 'Open first harpoon entry',
+        },
+        {
+          '<leader>j',
+          function()
+            harpoon:list():select(2)
+          end,
+          desc = 'Open second harpoon entry',
+        },
+        {
+          '<leader>k',
+          function()
+            harpoon:list():select(3)
+          end,
+          desc = 'Open third harpoon entry',
+        },
+        {
+          '<leader>l',
+          function()
+            harpoon:list():select(4)
+          end,
+          desc = 'Open fourth harpoon entry',
+        },
+        {
+          '<C-e>',
+          function()
             harpoon.ui:toggle_quick_menu(harpoon:list())
           end,
-          desc = 'Harpoon Quick Menu',
+          desc = 'Toggle Harpoon quick menu',
         },
       }
-
-      local used_keys = {
-        'h',
-        'j',
-        'k',
-        'l',
-      }
-      for i = 1, 4 do
-        table.insert(keys, {
-          '<leader>' .. used_keys[i],
-          function()
-            require('harpoon'):list():select(i)
-          end,
-          desc = 'Harpoon to File ' .. i,
-        })
-      end
       return keys
     end,
   },

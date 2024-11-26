@@ -3,6 +3,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 vim.g.terminal_emulator = 'konsole'
+vim.opt.conceallevel = 1
 
 -- 4 space tabs
 vim.opt.tabstop = 4
@@ -364,16 +365,15 @@ require('lazy').setup({
             },
           },
         },
-        --
-        omnisharp_mono = {
-          filetypes = { 'cs' },
-          cmd = { 'omnisharp-mono', '--languageserver', '--hostPID', tostring(vim.fn.getpid()) },
-          root_dir = require('lspconfig').util.root_pattern('*.sln', '*.csproj', '.git'),
-          settings = {
-            useModernNet = false,
-            monoPath = vim.fn.system { 'which', 'mono' },
-          },
-        },
+        -- omnisharp_mono = {
+        --   filetypes = { 'cs' },
+        --   cmd = { 'omnisharp-mono', '--languageserver', '--hostPID', tostring(vim.fn.getpid()) },
+        --   root_dir = require('lspconfig').util.root_pattern('*.sln', '*.csproj', '.git'),
+        --   settings = {
+        --     useModernNet = false,
+        --     monoPath = vim.fn.system { 'which', 'mono' },
+        --   },
+        -- },
 
         --- FRONTEND
         -- HTML, CSS, JS, TS, Svelte, Vue, TailwindCSS
@@ -591,14 +591,13 @@ require('lazy').setup({
   },
   {
     -- :Telescop colorscheme
-    'ellisonleao/gruvbox.nvim',
+    'catppuccin/nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'gruvbox'
-
+      vim.cmd.colorscheme 'catppuccin'
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
@@ -625,6 +624,8 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
+      require('mini.align').setup()
+
       -- Allows multi language comments (vue -> typescript, css, html)
       require('mini.comment').setup {
         hooks = {
@@ -649,7 +650,7 @@ require('lazy').setup({
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -660,9 +661,11 @@ require('lazy').setup({
     },
   },
   require 'plugins.lint',
+  require 'plugins.gitsigns',
   require 'plugins.copilot',
   require 'plugins.harpoon',
   require 'plugins.neo-tree',
+  require 'plugins.obsidian',
 }, {
   ui = {
     icons = vim.g.have_nerd_font and {} or {

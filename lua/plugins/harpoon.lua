@@ -14,7 +14,7 @@ return {
         desc = 'Add current file to harpoon',
       },
       {
-        '<leader>h',
+        '<leader>i',
         function()
           harpoon:list():select(1)
         end,

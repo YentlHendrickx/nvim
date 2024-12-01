@@ -3,7 +3,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 vim.g.terminal_emulator = 'konsole'
-vim.opt.conceallevel = 1
+vim.opt.conceallevel = 0
 
 -- 4 space tabs
 vim.opt.tabstop = 4

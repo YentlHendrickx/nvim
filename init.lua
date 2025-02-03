@@ -7,6 +7,7 @@ vim.opt.conceallevel = 0
 
 -- 4 space tabs
 vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
 
 -- line numbers/ relative line numbers
 vim.opt.number = true
@@ -354,6 +355,7 @@ require('lazy').setup({
         --- BACKEND
         -- Rust
         rust_analyzer = {
+          filetypes = { 'rust' },
           capabilities = {
             textDocument = {
               completion = {
@@ -364,6 +366,16 @@ require('lazy').setup({
               },
             },
           },
+        },
+        clangd = {
+          filetypes = { 'c', 'cpp' },
+          cmd = { 'clangd', '--offset-encoding=utf-16' },
+        },
+        intelephense = {
+          filetypes = { 'php' },
+        },
+        stimulus_ls = {
+          filetypes = { 'blade' },
         },
         -- omnisharp_mono = {
         --   filetypes = { 'cs' },
@@ -390,6 +402,12 @@ require('lazy').setup({
                 languages = { 'javascript', 'typescript', 'vue' },
               },
             },
+            format_on_save = true,
+            formatters_by_ft = {
+              javascript = { 'prettier' },
+              typescript = { 'prettier' },
+              vue = { 'prettier' },
+            },
           },
           filetypes = {
             'javascript',
@@ -397,7 +415,6 @@ require('lazy').setup({
             'vue',
           },
         },
-
         -- Scripting
         lua_ls = {
           settings = {
@@ -464,6 +481,9 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        javascript = { 'prettierd', 'prettier' },
+        typescript = { 'prettierd', 'prettier' },
+        c = { 'clang-format' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -597,7 +617,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'catppuccin'
+      vim.cmd.colorscheme 'catppuccin-mocha'
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
@@ -650,7 +670,7 @@ require('lazy').setup({
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'query', 'vim', 'vimdoc', 'php', 'blade' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -659,6 +679,26 @@ require('lazy').setup({
       },
       indent = { enable = true, disable = { 'ruby' } },
     },
+    config = function(_, opts)
+      local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
+
+      parser_config.blade = {
+        install_info = {
+          url = 'https://github.com/EmranMR/tree-sitter-blade',
+          files = { 'src/parser.c' },
+          branch = 'main',
+        },
+        filetype = 'blade',
+      }
+
+      vim.filetype.add {
+        pattern = {
+          ['.*%.blade%.php'] = 'blade',
+        },
+      }
+
+      require('nvim-treesitter.configs').setup(opts)
+    end,
   },
   require 'plugins.lint',
   require 'plugins.gitsigns',
@@ -666,6 +706,7 @@ require('lazy').setup({
   require 'plugins.harpoon',
   require 'plugins.neo-tree',
   require 'plugins.obsidian',
+  require 'plugins.dap',
 }, {
   ui = {
     icons = vim.g.have_nerd_font and {} or {

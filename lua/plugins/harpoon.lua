@@ -2,7 +2,15 @@ return {
   'ThePrimeagen/harpoon',
   branch = 'harpoon2',
   dependencies = { 'nvim-lua/plenary.nvim' },
-  -- Custom mappings for harpoon, make it so that 'leader' h -> is harpoon:list():select(1)
+  config = function()
+    local harpoon = require 'harpoon'
+    harpoon:setup {
+      settings = {
+        save_on_toggle = true,
+        save_on_change = true,
+      },
+    }
+  end,
   keys = function()
     local harpoon = require 'harpoon'
     local keys = {
@@ -14,35 +22,35 @@ return {
         desc = 'Add current file to harpoon',
       },
       {
-        '<leader>i',
+        '<leader>j',
         function()
           harpoon:list():select(1)
         end,
         desc = 'Open first harpoon entry',
       },
       {
-        '<leader>j',
+        '<leader>k',
         function()
           harpoon:list():select(2)
         end,
         desc = 'Open second harpoon entry',
       },
       {
-        '<leader>k',
+        '<leader>l',
         function()
           harpoon:list():select(3)
         end,
         desc = 'Open third harpoon entry',
       },
       {
-        '<leader>l',
+        '<leader>;',
         function()
           harpoon:list():select(4)
         end,
         desc = 'Open fourth harpoon entry',
       },
       {
-        '<C-e>',
+        '<leader>h',
         function()
           harpoon.ui:toggle_quick_menu(harpoon:list())
         end,

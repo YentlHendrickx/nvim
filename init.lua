@@ -373,6 +373,15 @@ require('lazy').setup({
         },
         intelephense = {
           filetypes = { 'php' },
+          settings = {
+            intelephense = {
+              diagnostics = {
+                undefinedVariable = true,
+                undefinedTypes = true,
+                argumentCount = true,
+              },
+            },
+          },
         },
         stimulus_ls = {
           filetypes = { 'blade' },
@@ -407,6 +416,14 @@ require('lazy').setup({
               javascript = { 'prettier' },
               typescript = { 'prettier' },
               vue = { 'prettier' },
+            },
+          },
+          settings = {
+            typescript = {
+              preferences = {
+                importModuleSpecifier = 'non-relative',
+                importModuleSpecifierPreference = 'project-relative',
+              },
             },
           },
           filetypes = {
@@ -665,6 +682,11 @@ require('lazy').setup({
       end
     end,
   },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+    opts = {},
+  },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -698,6 +720,12 @@ require('lazy').setup({
       }
 
       require('nvim-treesitter.configs').setup(opts)
+    end,
+  },
+  { -- Always keep context at top
+    'nvim-treesitter/nvim-treesitter-context',
+    config = function()
+      require('treesitter-context').setup { enable = true }
     end,
   },
   require 'plugins.lint',

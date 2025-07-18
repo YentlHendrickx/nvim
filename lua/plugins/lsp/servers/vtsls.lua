@@ -10,9 +10,11 @@ return {
         tsserver = {
           globalPlugins = {
             {
-              name = '@vue/typescript-plugin',
-              location = '/usr/local/lib/node/node_modules/@vue/typescript-plugin',
+              configNamespace = 'typescript',
+              enableForWorkspaceTypeScriptVersions = true,
               languages = { 'vue' },
+              location = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue-language-server',
+              name = '@vue/typescript-plugin',
             },
           },
         },
@@ -44,10 +46,10 @@ return {
         importModuleSpecifierPreference = 'project-relative',
       },
       inlayHints = {
-        enumMemberValues = { enabled = true },
-        functionLikeReturnTypes = { enabled = true },
         parameterNames = { enabled = 'literals' },
         parameterTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
         propertyDeclarationTypes = { enabled = true },
         variableTypes = { enabled = false },
       },

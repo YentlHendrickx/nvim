@@ -131,8 +131,12 @@ return {
       for _, server_file in ipairs(server_configs) do
         local config = require('plugins.lsp.servers.' .. server_file)
         for name, server_opts in pairs(config) do
-          vim.lsp.config(name, server_opts or {})
-          vim.lsp.enable(name)
+          -- Make sure to add capabilities to the server options.
+          local opts = vim.tbl_deep_extend('force', server_opts or {}, {
+            capabilities = vim.deepcopy(capabilities),
+          })
+
+          require('lspconfig')[name].setup(opts)
         end
       end
     end,
@@ -145,12 +149,6 @@ return {
       {
         'L3MON4D3/LuaSnip',
         build = (function()
-          -- Build Step is needed for regex support in snippets.
-          -- This step is not supported in many windows environments.
-          -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
-            return
-          end
           return 'make install_jsregexp'
         end)(),
         dependencies = {

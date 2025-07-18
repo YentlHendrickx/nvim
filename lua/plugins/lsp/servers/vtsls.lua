@@ -1,5 +1,4 @@
 return {
-		w 
   vtsls = {
     filetypes = {
       'javascript',

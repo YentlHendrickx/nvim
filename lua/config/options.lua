@@ -6,7 +6,7 @@ vim.g.have_nerd_font = true
 -- Fixes text scaling issues for me
 vim.g.terminal_emulator = 'konsole'
 
--- Concel level for specific plugins
+-- Conceal level for specific plugins, verbose 0 is the way to go
 vim.opt.conceallevel = 0
 
 -- 4 space tabs

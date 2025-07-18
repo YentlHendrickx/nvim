@@ -1,3 +1,4 @@
+-- Harpoon my beloved...
 return {
   'ThePrimeagen/harpoon',
   branch = 'harpoon2',

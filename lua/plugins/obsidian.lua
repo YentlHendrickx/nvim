@@ -1,9 +1,8 @@
+-- Obsidian, useful for jumping between notes and creating links automatically
 return {
   'epwalsh/obsidian.nvim',
   version = '*',
   lazy = true,
-  -- ft = "markdown", -- Enable on all markdown
-  -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
   event = {
     -- All vaults should be here!
     'BufReadPre /home/haze/notes/myst/*.md',
@@ -18,10 +17,6 @@ return {
         name = 'myst',
         path = '/home/haze/notes/myst',
       },
-      -- {
-      --   name = "work",
-      --   path = "~/vaults/work",
-      -- },
     },
   },
 }

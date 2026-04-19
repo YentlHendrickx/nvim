@@ -36,6 +36,7 @@ return {
         lua = { 'stylua' },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        vue = { 'prettierd', 'prettier', stop_after_first = true },
         c = { 'clang-format', stop_after_first = true },
       },
     },

@@ -4,13 +4,9 @@ return {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
-      -- Automatically install LSPs and related tools to stdpath for Neovim
-      -- { 'mason-org/mason.nvim', config = true, version = '^1.0.0' }, -- NOTE: Must be loaded before dependants
-      -- { 'mason-org/mason-lspconfig.nvim', version = '^1.0.0' },
-      { 'mason-org/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
+      { 'mason-org/mason.nvim', config = true },
 
       -- Useful status updates for LSP.
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
@@ -107,18 +103,13 @@ return {
 
       require('mason').setup()
 
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        'vtsls', -- New Typescript Language Server
-        'lua_ls', -- Lua Language Server
-      })
-
       -- Dynamic definition of servers, these are all defined in the 'plugins/lsp/servers' directory.
       local server_configs = {
         -- Frontend
         'vtsls',
         'tailwindcss',
 
+        -- 'omnisharp_mono',
         -- Backend
         'intelephense',
         'stimulus_ls',
@@ -127,6 +118,13 @@ return {
         'rust_analyzer',
         -- NOTE: Copilot is not included in this list, however it does get registered as an LSP client. The plugin handles this themselves and does not rely on nvim-lspconfig.
       }
+
+      -- TODO: Fix this, auto install servers
+      -- local ensure_installed = vim.tbl_keys(server_configs)
+      -- vim.list_extend(ensure_installed, {
+      --   'vtsls', -- New Typescript Language Server
+      --   'lua_ls', -- Lua Language Server
+      -- })
 
       for _, server_file in ipairs(server_configs) do
         local config = require('plugins.lsp.servers.' .. server_file)

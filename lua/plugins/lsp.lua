@@ -7,7 +7,7 @@ return {
       { 'mason-org/mason.nvim', config = true },
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',    opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -62,7 +62,7 @@ return {
 
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -86,7 +86,7 @@ return {
           end
 
           -- Inlay hints
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, '[T]oggle Inlay [H]ints')
@@ -108,6 +108,7 @@ return {
         -- Frontend
         'vtsls',
         'tailwindcss',
+        'gdscript',
 
         -- 'omnisharp_mono',
         -- Backend
@@ -134,7 +135,34 @@ return {
             capabilities = vim.deepcopy(capabilities),
           })
 
-          require('lspconfig')[name].setup(opts)
+          -- Only start the Godot LSP if Godot is running, otherwise it will throw an error and not start the server at all.
+          local function godot_running()
+            local tcp = vim.uv.new_tcp()
+            if not tcp then
+              return false
+            end
+
+            local success = false
+
+            tcp:connect("127.0.0.1", 6005, function(err)
+              if not err then
+                success = true
+              end
+              tcp:close()
+            end)
+
+            vim.uv.run("nowait")
+            return success
+          end
+
+          if name == 'gdscript' then
+            if godot_running() then
+              opts.cmd = vim.lsp.rpc.connect('127.0.0.1', 6005)
+            end
+          end
+
+          vim.lsp.config[name] = opts
+          vim.lsp.enable(name)
         end
       end
     end,
